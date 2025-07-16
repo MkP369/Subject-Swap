@@ -6,7 +6,7 @@ import zxcvbn from 'zxcvbn';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {useNavigate} from 'react-router-dom';
 import {useAuthStore} from "../store/authStore.jsx";
-
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Signup() {
     const [submitting, setSubmitting] = useState(false);
@@ -31,7 +31,7 @@ export default function Signup() {
         }
 
         try {
-            const res = await fetch(`http://localhost:4000/api/check-username?username=${encodeURIComponent(username)}`);
+            const res = await fetch(`${API_URL}/api/check-username?username=${encodeURIComponent(username)}`);
             if (!res.ok) {
                 throw new Error("Failed to check username");
             }
@@ -86,7 +86,7 @@ export default function Signup() {
                     ? {username, age, email, userClass, board, language, phone, password}
                     : {username, age, email, userClass, language, phone, password};
 
-                const response = await fetch("http://localhost:4000/api/signup", {
+                const response = await fetch(`${API_URL}/api/signup`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(requestBody),

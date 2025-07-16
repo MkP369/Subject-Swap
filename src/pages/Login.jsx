@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from "../store/authStore.jsx";
 import validator from 'validator';
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Login() {
     const [submitting, setSubmitting] = useState(false);
@@ -36,7 +37,7 @@ export default function Login() {
         if (Object.keys(newErrors).length === 0) {
             try {
                 setSubmitting(true);
-                const response = await fetch(`http://localhost:4000/api/login`, {
+                const response = await fetch(`${API_URL}/api/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, password }),
@@ -69,13 +70,6 @@ export default function Login() {
         <div className="login-container">
             <form onSubmit={handleSubmit}>
                 <h2>Log In</h2>
-
-                {errors.general && (
-                    <div className="error-text" style={{ marginBottom: '1rem' }}>
-                        {errors.general}
-                    </div>
-                )}
-
                 <input
                     type="email"
                     placeholder="Email"
@@ -99,6 +93,7 @@ export default function Login() {
                     className={`login-input ${errors.password ? 'input-error' : ''}`}
                 />
                 {errors.password && <div className="error-text">{errors.password}</div>}
+                {errors.general && <div className="error-text">{errors.general}</div>}
 
                 <button
                     type="submit"
