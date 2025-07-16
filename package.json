@@ -10,8 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@chatscope/chat-ui-kit-react": "^2.1.1",
-    "@chatscope/chat-ui-kit-styles": "^1.4.0",
     "libphonenumber-js": "^1.12.10",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -29,6 +27,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.2.0",
+    "msw": "^2.10.4",
     "vite": "^7.0.0"
   }
 }

@@ -32,11 +32,17 @@ export default function Signup() {
 
         try {
             const res = await fetch(`http://localhost:4000/api/check-username?username=${encodeURIComponent(username)}`);
+            if (!res.ok) {
+                throw new Error("Failed to check username");
+            }
             const data = await res.json();
             if (data.exists) {
                 setErrors(prev => ({...prev, username: "Username already taken"}));
+            }else {
+                setErrors({ ...errors, username: "" });
             }
         } catch (err) {
+            setErrors({ ...errors, username: "Error checking username. Please try again." });
             console.error("Error checking username:", err);
         }
     };
@@ -85,7 +91,9 @@ export default function Signup() {
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(requestBody),
                 });
-
+                if (!response.ok) {
+                    throw new Error(`Signup failed (Status: ${response.status})`);
+                }
                 const result = await response.json();
 
                 if (result.success) {
@@ -94,14 +102,16 @@ export default function Signup() {
                         user: result.user,
                         token: result.token
                     });
-                    navigate('/app/dashboard');
+                    setTimeout(() => navigate("/app/dashboard"), 1500);
                 } else if (result.errors) {
                     setErrors(prev => ({...prev, ...result.errors}));
                 } else {
                     console.error("Unexpected response from server");
+                    setErrors({ general: "Unexpected server response. Please try again." });
                 }
             } catch (err) {
                 console.error("Network/server error:", err);
+                setErrors({ general: err.message || "Network or server error. Please try again." });
             } finally {
                 setSubmitting(false);
             }
@@ -276,7 +286,7 @@ export default function Signup() {
                     className={`signup-input ${errors.password ? 'input-error' : ''}`}
                 />
                 {errors.password && <div className="error-text">{errors.password}</div>}
-
+                {errors.general && <div className="error-text">{errors.general}</div>}
                 <button type="submit" className="signup-button" disabled={submitting}>
                     {submitting ? <div className="loader"></div> : "Sign Up"}
                 </button>
