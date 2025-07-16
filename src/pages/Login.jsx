@@ -36,28 +36,29 @@ export default function Login() {
         if (Object.keys(newErrors).length === 0) {
             try {
                 setSubmitting(true);
-                const response = await fetch("http://localhost:4000/api/login", {
+                const response = await fetch(`http://localhost:4000/api/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, password }),
                 });
 
+                if (!response.ok) {
+                    throw new Error(`Login failed (Status: ${response.status})`);
+                }
+
                 const result = await response.json();
 
                 if (result.success) {
-                    login({
-                        user: result.user,
-                        token: result.token
-                    });
-                    navigate('/app/dashboard');
+                    login({ user: result.user, token: result.token });
+                    navigate("/app/dashboard");
                 } else if (result.errors) {
-                    setErrors(prev => ({ ...prev, ...result.errors }));
+                    setErrors({ ...result.errors, general: "" });
                 } else {
                     setErrors({ general: "Invalid email or password" });
                 }
             } catch (err) {
-                console.error("Network/server error:", err);
-                setErrors({ general: "An error occurred. Please try again." });
+                console.error("Login error:", err);
+                setErrors({ general: err.message || "Network or server error. Please try again." });
             } finally {
                 setSubmitting(false);
             }
