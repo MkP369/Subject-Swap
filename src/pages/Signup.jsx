@@ -6,7 +6,7 @@ import zxcvbn from 'zxcvbn';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {useNavigate} from 'react-router-dom';
 import {useAuthStore} from "../store/authStore.jsx";
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = import.meta.env.VITE_API_URL
 
 export default function Signup() {
     const [submitting, setSubmitting] = useState(false);
@@ -48,7 +48,7 @@ export default function Signup() {
     };
 
     const validate = () => {
-        const newErrors = {};
+        const newErrors = {...errors};
 
         if (!username.trim()) newErrors.username = "Username is required.";
         else if (!/^[a-zA-Z0-9_.-]+$/.test(username)) {
@@ -72,12 +72,28 @@ export default function Signup() {
             newErrors.phone = "Enter a valid Indian phone number.";
         }
 
+
         return newErrors;
     };
 
     const handleSubmit = async () => {
         const newErrors = validate();
         setErrors(newErrors);
+        if (!validationErrors.username && username.trim()) {
+            try {
+                const res = await fetch(`${API_URL}/api/check-username?username=${encodeURIComponent(username)}`);
+                if (!res.ok) throw new Error("Failed to check username");
+
+                const data = await res.json();
+                if (data.exists) {
+                    setErrors(prev => ({...prev, username: "Username already taken"}));
+                    return; // Stop submission if username exists
+                }
+            } catch (err) {
+                setErrors({...errors, username: "Error checking username. Please try again."});
+                return; // Stop submission on network error
+            }
+        }
 
         if (Object.keys(newErrors).length === 0) {
             try {
