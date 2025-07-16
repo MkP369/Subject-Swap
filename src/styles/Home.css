@@ -1,0 +1,15 @@
+h1{
+    font-size: 4rem;
+    font-weight: 800;
+    background: linear-gradient(45deg, #ff3366, #ba4aff, #4a90e2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
