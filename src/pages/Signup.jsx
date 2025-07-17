@@ -6,11 +6,7 @@ import zxcvbn from 'zxcvbn';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {useNavigate} from 'react-router-dom';
 import {useAuthStore} from "../store/authStore.jsx";
-<<<<<<< HEAD
-const API_URL = import.meta.env.VITE_API_URL
-=======
 
->>>>>>> adcbce6 (Add all project files including backend models)
 
 export default function Signup() {
     const [submitting, setSubmitting] = useState(false);
@@ -35,37 +31,18 @@ export default function Signup() {
         }
 
         try {
-<<<<<<< HEAD
-            const res = await fetch(`${API_URL}/api/check-username?username=${encodeURIComponent(username)}`);
-            if (!res.ok) {
-                throw new Error("Failed to check username");
-            }
-            const data = await res.json();
-            if (data.exists) {
-                setErrors(prev => ({...prev, username: "Username already taken"}));
-            }else {
-                setErrors({ ...errors, username: "" });
-            }
-        } catch (err) {
-            setErrors({ ...errors, username: "Error checking username. Please try again." });
-=======
             const res = await fetch(`http://localhost:8000/api/check-username?username=${encodeURIComponent(username)}`);
             const data = await res.json();
             if (data.exists) {
                 setErrors(prev => ({...prev, username: "Username already taken"}));
             }
         } catch (err) {
->>>>>>> adcbce6 (Add all project files including backend models)
             console.error("Error checking username:", err);
         }
     };
 
     const validate = () => {
-<<<<<<< HEAD
-        const newErrors = {...errors};
-=======
         const newErrors = {};
->>>>>>> adcbce6 (Add all project files including backend models)
 
         if (!username.trim()) newErrors.username = "Username is required.";
         else if (!/^[a-zA-Z0-9_.-]+$/.test(username)) {
@@ -89,34 +66,12 @@ export default function Signup() {
             newErrors.phone = "Enter a valid Indian phone number.";
         }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> adcbce6 (Add all project files including backend models)
         return newErrors;
     };
 
     const handleSubmit = async () => {
         const newErrors = validate();
         setErrors(newErrors);
-<<<<<<< HEAD
-        if (!validationErrors.username && username.trim()) {
-            try {
-                const res = await fetch(`${API_URL}/api/check-username?username=${encodeURIComponent(username)}`);
-                if (!res.ok) throw new Error("Failed to check username");
-
-                const data = await res.json();
-                if (data.exists) {
-                    setErrors(prev => ({...prev, username: "Username already taken"}));
-                    return; // Stop submission if username exists
-                }
-            } catch (err) {
-                setErrors({...errors, username: "Error checking username. Please try again."});
-                return; // Stop submission on network error
-            }
-        }
-=======
->>>>>>> adcbce6 (Add all project files including backend models)
 
         if (Object.keys(newErrors).length === 0) {
             try {
@@ -125,19 +80,12 @@ export default function Signup() {
                     ? {username, age, email, userClass, board, language, phone, password}
                     : {username, age, email, userClass, language, phone, password};
 
-<<<<<<< HEAD
-                const response = await fetch(`${API_URL}/api/signup`, {
-=======
                 const response = await fetch("http://localhost:8000/api/signup", {
->>>>>>> adcbce6 (Add all project files including backend models)
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(requestBody),
                 });
-<<<<<<< HEAD
-                if (!response.ok) {
-                    throw new Error(`Signup failed (Status: ${response.status})`);
-                }
+
                 const result = await response.json();
 
                 if (result.success) {
@@ -146,35 +94,14 @@ export default function Signup() {
                         user: result.user,
                         token: result.token
                     });
-                    setTimeout(() => navigate("/app/dashboard"), 1500);
-=======
-
-                const result = await response.json();
-
-                if (result.success) {
-                console.log("User created!");
-
-                localStorage.setItem("token", result.token);  
-
-                login({ user: result.user, token: result.token });
-                navigate('/app/dashboard');  
-
->>>>>>> adcbce6 (Add all project files including backend models)
+                    navigate('/app/dashboard');
                 } else if (result.errors) {
                     setErrors(prev => ({...prev, ...result.errors}));
                 } else {
                     console.error("Unexpected response from server");
-<<<<<<< HEAD
-                    setErrors({ general: "Unexpected server response. Please try again." });
                 }
             } catch (err) {
                 console.error("Network/server error:", err);
-                setErrors({ general: err.message || "Network or server error. Please try again." });
-=======
-                }
-            } catch (err) {
-                console.error("Network/server error:", err);
->>>>>>> adcbce6 (Add all project files including backend models)
             } finally {
                 setSubmitting(false);
             }
@@ -199,6 +126,7 @@ export default function Signup() {
                     }}
                     onBlur={checkUsername}
                     className={`signup-input ${errors.username ? 'input-error' : ''}`}
+
                 />
                 {errors.username && <div className="error-text">{errors.username}</div>}
 
@@ -210,7 +138,8 @@ export default function Signup() {
                         setAge(e.target.value);
                         setErrors(prev => ({...prev, age: ''}));
                     }}
-                    className={`signup-input ${errors.age ? 'input-error' : ''}`}
+                    className={`signup-input ${errors.username ? 'input-error' : ''}`}
+
                 />
                 {errors.age && <div className="error-text">{errors.age}</div>}
 
@@ -222,7 +151,8 @@ export default function Signup() {
                         setEmail(e.target.value);
                         setErrors(prev => ({...prev, email: ''}));
                     }}
-                    className={`signup-input ${errors.email ? 'input-error' : ''}`}
+                    className={`signup-input ${errors.username ? 'input-error' : ''}`}
+
                 />
                 {errors.email && <div className="error-text">{errors.email}</div>}
 
@@ -236,7 +166,8 @@ export default function Signup() {
                             setBoard('');
                         }
                     }}
-                    className={`signup-input ${errors.userClass ? 'input-error' : ''}`}
+                    className={`signup-input ${errors.username ? 'input-error' : ''}`}
+
                 >
                     <option value="">What are you preparing for?</option>
 
@@ -301,7 +232,8 @@ export default function Signup() {
                                 setBoard(e.target.value);
                                 setErrors(prev => ({...prev, board: ''}));
                             }}
-                            className={`signup-input ${errors.board ? 'input-error' : ''}`}
+                            className={`signup-input ${errors.username ? 'input-error' : ''}`}
+
                         >
                             <option value="">Select Board</option>
                             <option value="cbse">CBSE</option>
@@ -317,7 +249,8 @@ export default function Signup() {
                         setLanguage(e.target.value);
                         setErrors(prev => ({...prev, language: ''}));
                     }}
-                    className={`signup-input ${errors.language ? 'input-error' : ''}`}
+                    className={`signup-input ${errors.username ? 'input-error' : ''}`}
+
                 >
                     <option value="">Select Language</option>
                     <option value="hindi">Hindi</option>
@@ -334,7 +267,8 @@ export default function Signup() {
                         setPhone(e.target.value);
                         setErrors(prev => ({...prev, phone: ''}));
                     }}
-                    className={`signup-input ${errors.phone ? 'input-error' : ''}`}
+                    className={`signup-input ${errors.username ? 'input-error' : ''}`}
+
                 />
                 {errors.phone && <div className="error-text">{errors.phone}</div>}
 
@@ -346,14 +280,11 @@ export default function Signup() {
                         setPassword(e.target.value);
                         setErrors(prev => ({...prev, password: ''}));
                     }}
-                    className={`signup-input ${errors.password ? 'input-error' : ''}`}
+                    className={`signup-input ${errors.username ? 'input-error' : ''}`}
+
                 />
                 {errors.password && <div className="error-text">{errors.password}</div>}
-<<<<<<< HEAD
-                {errors.general && <div className="error-text">{errors.general}</div>}
-=======
 
->>>>>>> adcbce6 (Add all project files including backend models)
                 <button type="submit" className="signup-button" disabled={submitting}>
                     {submitting ? <div className="loader"></div> : "Sign Up"}
                 </button>
@@ -361,5 +292,4 @@ export default function Signup() {
             </form>
         </div>
 
-    );
-}
+    )};

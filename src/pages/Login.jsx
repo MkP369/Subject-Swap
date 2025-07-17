@@ -3,11 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from "../store/authStore.jsx";
 import validator from 'validator';
-<<<<<<< HEAD
-const API_URL = import.meta.env.VITE_API_URL
-=======
 
->>>>>>> adcbce6 (Add all project files including backend models)
 export default function Login() {
     const [submitting, setSubmitting] = useState(false);
     const [email, setEmail] = useState('');
@@ -40,29 +36,12 @@ export default function Login() {
         if (Object.keys(newErrors).length === 0) {
             try {
                 setSubmitting(true);
-<<<<<<< HEAD
-                const response = await fetch(`${API_URL}/api/login`, {
-=======
-                const response = await fetch("http://localhost:8000/api/login", {
->>>>>>> adcbce6 (Add all project files including backend models)
+                const response = await fetch("http://localhost:4000/api/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, password }),
                 });
 
-<<<<<<< HEAD
-                if (!response.ok) {
-                    throw new Error(`Login failed (Status: ${response.status})`);
-                }
-
-                const result = await response.json();
-
-                if (result.success) {
-                    login({ user: result.user, token: result.token });
-                    navigate("/app/dashboard");
-                } else if (result.errors) {
-                    setErrors({ ...result.errors, general: "" });
-=======
                 const result = await response.json();
 
                 if (result.success) {
@@ -73,18 +52,12 @@ export default function Login() {
                     navigate('/app/dashboard');
                 } else if (result.errors) {
                     setErrors(prev => ({ ...prev, ...result.errors }));
->>>>>>> adcbce6 (Add all project files including backend models)
                 } else {
                     setErrors({ general: "Invalid email or password" });
                 }
             } catch (err) {
-<<<<<<< HEAD
-                console.error("Login error:", err);
-                setErrors({ general: err.message || "Network or server error. Please try again." });
-=======
                 console.error("Network/server error:", err);
                 setErrors({ general: "An error occurred. Please try again." });
->>>>>>> adcbce6 (Add all project files including backend models)
             } finally {
                 setSubmitting(false);
             }
@@ -95,8 +68,6 @@ export default function Login() {
         <div className="login-container">
             <form onSubmit={handleSubmit}>
                 <h2>Log In</h2>
-<<<<<<< HEAD
-=======
 
                 {errors.general && (
                     <div className="error-text" style={{ marginBottom: '1rem' }}>
@@ -104,7 +75,6 @@ export default function Login() {
                     </div>
                 )}
 
->>>>>>> adcbce6 (Add all project files including backend models)
                 <input
                     type="email"
                     placeholder="Email"
@@ -113,7 +83,7 @@ export default function Login() {
                         setEmail(e.target.value);
                         setErrors(prev => ({ ...prev, email: '' }));
                     }}
-                    className={`login-input ${errors.email ? 'input-error' : ''}`}
+                    className={`login-input ${errors.password ? 'input-error' : ''}`}
                 />
                 {errors.email && <div className="error-text">{errors.email}</div>}
 
@@ -128,10 +98,6 @@ export default function Login() {
                     className={`login-input ${errors.password ? 'input-error' : ''}`}
                 />
                 {errors.password && <div className="error-text">{errors.password}</div>}
-<<<<<<< HEAD
-                {errors.general && <div className="error-text">{errors.general}</div>}
-=======
->>>>>>> adcbce6 (Add all project files including backend models)
 
                 <button
                     type="submit"
