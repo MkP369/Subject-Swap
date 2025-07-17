@@ -36,7 +36,7 @@ export default function Login() {
         if (Object.keys(newErrors).length === 0) {
             try {
                 setSubmitting(true);
-                const response = await fetch("http://localhost:4000/api/login", {
+                const response = await fetch("http://localhost:8000/api/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, password }),
