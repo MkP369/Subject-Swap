@@ -11,5 +11,4 @@ const userSchema = new mongoose.Schema({
   language: String
 });
 
-// 👇 This is what you should export
 module.exports = mongoose.model('User', userSchema);
