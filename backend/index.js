@@ -4,6 +4,12 @@ const path = require('path');
 const multer = require('multer');
 const { Server } = require('socket.io');
 const fs = require('fs');
+<<<<<<< HEAD
+=======
+const mongoose = require('mongoose');
+const cors = require('cors');
+const authRoutes = require('./routes/auth');
+>>>>>>> adcbce6 (Add all project files including backend models)
 const { time, timeStamp } = require('console');
 
 const messagesFile = path.join(__dirname, 'messages.json');
@@ -12,8 +18,30 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const users = {};
+<<<<<<< HEAD
 
 const usersFile = path.join(__dirname, 'users.json');
+=======
+app.use(express.static('public'));
+const usersFile = path.join(__dirname, 'users.json');
+const mangourl = 'mongodb://localhost:27017/subjectswap';
+
+
+app.use(cors());
+app.use(express.json());
+const PORT = 8000;
+app.use('/api', authRoutes);
+
+
+mongoose.connect(mangourl)
+  .then(() => {
+    console.log('db connected');
+    
+  })
+  .catch(err => {
+    console.error(' db not connection' , err);
+  });
+>>>>>>> adcbce6 (Add all project files including backend models)
 
 function loadAllUsers(){
   if(!fs.existsSync(usersFile)) return {};

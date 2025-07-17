@@ -6,7 +6,11 @@ import zxcvbn from 'zxcvbn';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {useNavigate} from 'react-router-dom';
 import {useAuthStore} from "../store/authStore.jsx";
+<<<<<<< HEAD
 const API_URL = import.meta.env.VITE_API_URL
+=======
+
+>>>>>>> adcbce6 (Add all project files including backend models)
 
 export default function Signup() {
     const [submitting, setSubmitting] = useState(false);
@@ -31,6 +35,7 @@ export default function Signup() {
         }
 
         try {
+<<<<<<< HEAD
             const res = await fetch(`${API_URL}/api/check-username?username=${encodeURIComponent(username)}`);
             if (!res.ok) {
                 throw new Error("Failed to check username");
@@ -43,12 +48,24 @@ export default function Signup() {
             }
         } catch (err) {
             setErrors({ ...errors, username: "Error checking username. Please try again." });
+=======
+            const res = await fetch(`http://localhost:8000/api/check-username?username=${encodeURIComponent(username)}`);
+            const data = await res.json();
+            if (data.exists) {
+                setErrors(prev => ({...prev, username: "Username already taken"}));
+            }
+        } catch (err) {
+>>>>>>> adcbce6 (Add all project files including backend models)
             console.error("Error checking username:", err);
         }
     };
 
     const validate = () => {
+<<<<<<< HEAD
         const newErrors = {...errors};
+=======
+        const newErrors = {};
+>>>>>>> adcbce6 (Add all project files including backend models)
 
         if (!username.trim()) newErrors.username = "Username is required.";
         else if (!/^[a-zA-Z0-9_.-]+$/.test(username)) {
@@ -72,13 +89,17 @@ export default function Signup() {
             newErrors.phone = "Enter a valid Indian phone number.";
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> adcbce6 (Add all project files including backend models)
         return newErrors;
     };
 
     const handleSubmit = async () => {
         const newErrors = validate();
         setErrors(newErrors);
+<<<<<<< HEAD
         if (!validationErrors.username && username.trim()) {
             try {
                 const res = await fetch(`${API_URL}/api/check-username?username=${encodeURIComponent(username)}`);
@@ -94,6 +115,8 @@ export default function Signup() {
                 return; // Stop submission on network error
             }
         }
+=======
+>>>>>>> adcbce6 (Add all project files including backend models)
 
         if (Object.keys(newErrors).length === 0) {
             try {
@@ -102,11 +125,16 @@ export default function Signup() {
                     ? {username, age, email, userClass, board, language, phone, password}
                     : {username, age, email, userClass, language, phone, password};
 
+<<<<<<< HEAD
                 const response = await fetch(`${API_URL}/api/signup`, {
+=======
+                const response = await fetch("http://localhost:8000/api/signup", {
+>>>>>>> adcbce6 (Add all project files including backend models)
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(requestBody),
                 });
+<<<<<<< HEAD
                 if (!response.ok) {
                     throw new Error(`Signup failed (Status: ${response.status})`);
                 }
@@ -119,15 +147,34 @@ export default function Signup() {
                         token: result.token
                     });
                     setTimeout(() => navigate("/app/dashboard"), 1500);
+=======
+
+                const result = await response.json();
+
+                if (result.success) {
+                console.log("User created!");
+
+                localStorage.setItem("token", result.token);  
+
+                login({ user: result.user, token: result.token });
+                navigate('/app/dashboard');  
+
+>>>>>>> adcbce6 (Add all project files including backend models)
                 } else if (result.errors) {
                     setErrors(prev => ({...prev, ...result.errors}));
                 } else {
                     console.error("Unexpected response from server");
+<<<<<<< HEAD
                     setErrors({ general: "Unexpected server response. Please try again." });
                 }
             } catch (err) {
                 console.error("Network/server error:", err);
                 setErrors({ general: err.message || "Network or server error. Please try again." });
+=======
+                }
+            } catch (err) {
+                console.error("Network/server error:", err);
+>>>>>>> adcbce6 (Add all project files including backend models)
             } finally {
                 setSubmitting(false);
             }
@@ -302,7 +349,11 @@ export default function Signup() {
                     className={`signup-input ${errors.password ? 'input-error' : ''}`}
                 />
                 {errors.password && <div className="error-text">{errors.password}</div>}
+<<<<<<< HEAD
                 {errors.general && <div className="error-text">{errors.general}</div>}
+=======
+
+>>>>>>> adcbce6 (Add all project files including backend models)
                 <button type="submit" className="signup-button" disabled={submitting}>
                     {submitting ? <div className="loader"></div> : "Sign Up"}
                 </button>
