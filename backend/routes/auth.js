@@ -4,7 +4,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const jwtkey = 'your_jwt_secret_here'; 
+const jwtkey = 'jwtsecretkey';
 router.get("/test", async (req, res) => {
   const allUsers = await User.find();  
   res.json(allUsers);
