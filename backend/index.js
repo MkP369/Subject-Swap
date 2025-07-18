@@ -21,13 +21,11 @@ const io = new Server(server, {
 });
 
 const users = {};
-
-
-
 app.use(express.static('public'));
 const usersFile = path.join(__dirname, 'users.json');
 const mangourl = process.env.MONGODB_URI || 'mongodb://localhost:27017/subjectswap';
 
+app.use(express.static('public'));
 
 app.use(cors());
 app.use(express.json());
@@ -43,6 +41,9 @@ mongoose.connect(mangourl)
   .catch(err => {
     console.error(' db not connection' , err);
   });
+
+ 
+
 
 function loadAllUsers(){
   if(!fs.existsSync(usersFile)) return {};
