@@ -1,3 +1,3 @@
 export default function FAQ() {
-    return <h1>Swap</h1>
+    return <h1>FAQ</h1>
 }

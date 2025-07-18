@@ -1,3 +1,3 @@
 export default function Testimonials () {
-    return <h1>Swap</h1>
+    return <h1>Testimonials</h1>
 }

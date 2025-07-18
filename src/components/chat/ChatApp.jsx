@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import ChatSidebar from './ChatSidebar';
 import ChatWindow from './ChatWindow';
-import "../../styles/Chat.css"
+import "../../styles/chat/Chat.css"
 
 export default function ChatApp() {
     const [selectedChat, setSelectedChat] = useState({
         id: 1,
         username: 'John Doe',
-        avatar: 'https://via.placeholder.com/40',
+        avatar: null,
     });
 
     const chats = [
-        { id: 1, username: 'John Doe', avatar: 'https://via.placeholder.com/40' },
-        { id: 2, username: 'Jane Smith', avatar: 'https://via.placeholder.com/40' },
-        { id: 3, username: 'Alice', avatar: 'https://via.placeholder.com/40' },
+        { id: 1, username: 'John Doe', avatar: null },
+        { id: 2, username: 'Jane Smith', avatar: null },
+        { id: 3, username: 'Alice', avatar: null },
     ];
 
     const messages = [

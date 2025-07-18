@@ -1,5 +1,5 @@
 import './styles/App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
@@ -14,34 +14,34 @@ import CurrentSwaps from './pages/CurrentSwaps.jsx';
 import Notifications from './pages/Notifications.jsx';
 
 
-import { useAuthStore } from './store/authStore.jsx';
+import {useAuthStore} from './store/authStore.jsx';
 
 export default function App() {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
     return (
         <Router>
-            <Navbar />
+            <Navbar/>
 
             <main>
                 <Routes>
-                    {/* Public marketing pages */}
-                    <Route path="/" element={<Home />} />
-                    <Route path="/how-it-works" element={<HowItWorks />} />
-                    <Route path="/testimonials" element={<Testimonials />} />
-                    <Route path="/faq" element={<FAQ />} />
+                    //public
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/how-it-works" element={<HowItWorks/>}/>
+                    <Route path="/testimonials" element={<Testimonials/>}/>
+                    <Route path="/faq" element={<FAQ/>}/>
 
-                    {/* Authentication pages */}
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/login" element={<Login />} />
+                    //auth
+                    <Route path="/signup" element={<Signup/>}/>
+                    <Route path="/login" element={<Login/>}/>
 
-                    {/* Protected “app” pages */}
+                    //after auth
                     <Route
                         path="/app/dashboard"
                         element={
                             isAuthenticated
-                                ? <Dashboard />
-                                : <Navigate to="/login" replace />
+                                ? <Dashboard/>
+                                : <Navigate to="/login" replace/>
                         }
                     />
                     <Route
@@ -49,7 +49,7 @@ export default function App() {
                         element={
                             isAuthenticated
                                 ? <CurrentSwaps/>
-                                : <Navigate to="/login" replace />
+                                : <Navigate to="/login" replace/>
                         }
                     />
 
@@ -57,27 +57,27 @@ export default function App() {
                         path="/app/profile"
                         element={
                             isAuthenticated
-                                ? <Profile />
-                                : <Navigate to="/login" replace />
+                                ? <Profile/>
+                                : <Navigate to="/login" replace/>
                         }
                     />
                     <Route
                         path="/app/notifications"
                         element={
                             isAuthenticated
-                                ? <Notifications />
-                                : <Navigate to="/login" replace />
+                                ? <Notifications/>
+                                : <Navigate to="/login" replace/>
                         }
                     />
 
 
-                    {/* Fallback: redirect based on auth status */}
+                    //fallback
                     <Route
                         path="*"
                         element={
                             isAuthenticated
-                                ? <Navigate to="/app/dashboard" replace />
-                                : <Navigate to="/" replace />
+                                ? <Navigate to="/app/dashboard" replace/>
+                                : <Navigate to="/" replace/>
                         }
                     />
                 </Routes>

@@ -1,9 +1,10 @@
 import "../styles/Login.css";
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from "../store/authStore.jsx";
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useAuthStore} from "../store/authStore.jsx";
 import validator from 'validator';
 
+const API_URL = import.meta.env.VITE_API_URL;
 export default function Login() {
     const [submitting, setSubmitting] = useState(false);
     const [email, setEmail] = useState('');
@@ -36,10 +37,10 @@ export default function Login() {
         if (Object.keys(newErrors).length === 0) {
             try {
                 setSubmitting(true);
-                const response = await fetch("http://localhost:4000/api/login", {
+                const response = await fetch(`${API_URL}/api/login`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password }),
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({email, password}),
                 });
 
                 const result = await response.json();
@@ -51,13 +52,13 @@ export default function Login() {
                     });
                     navigate('/app/dashboard');
                 } else if (result.errors) {
-                    setErrors(prev => ({ ...prev, ...result.errors }));
+                    setErrors(prev => ({...prev, ...result.errors}));
                 } else {
-                    setErrors({ general: "Invalid email or password" });
+                    setErrors({general: "Invalid email or password"});
                 }
             } catch (err) {
                 console.error("Network/server error:", err);
-                setErrors({ general: "An error occurred. Please try again." });
+                setErrors({general: "An error occurred. Please try again."});
             } finally {
                 setSubmitting(false);
             }
@@ -70,7 +71,7 @@ export default function Login() {
                 <h2>Log In</h2>
 
                 {errors.general && (
-                    <div className="error-text" style={{ marginBottom: '1rem' }}>
+                    <div className="error-text" style={{marginBottom: '1rem'}}>
                         {errors.general}
                     </div>
                 )}
@@ -81,7 +82,7 @@ export default function Login() {
                     value={email}
                     onChange={(e) => {
                         setEmail(e.target.value);
-                        setErrors(prev => ({ ...prev, email: '' }));
+                        setErrors(prev => ({...prev, email: ''}));
                     }}
                     className={`login-input ${errors.password ? 'input-error' : ''}`}
                 />
@@ -93,7 +94,7 @@ export default function Login() {
                     value={password}
                     onChange={(e) => {
                         setPassword(e.target.value);
-                        setErrors(prev => ({ ...prev, password: '' }));
+                        setErrors(prev => ({...prev, password: ''}));
                     }}
                     className={`login-input ${errors.password ? 'input-error' : ''}`}
                 />

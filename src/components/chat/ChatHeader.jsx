@@ -5,7 +5,11 @@ export default function ChatHeader({ selectedChat }) {
 
     return (
         <div className="chat-header">
-            <img src={selectedChat.avatar} alt={selectedChat.username} className="chat-header-avatar" />
+            {selectedChat.avatar ? (
+                <img src={selectedChat.avatar} alt={selectedChat.username} className="chat-header-avatar" />
+            ) : (
+                <div className="chat-header-avatar-placeholder">{selectedChat.username.charAt(0)}</div>
+            )}
             <button className="chat-header-username">{selectedChat.username}</button>
             <div className="chat-header-menu">
                 <button

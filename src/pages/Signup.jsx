@@ -6,11 +6,12 @@ import zxcvbn from 'zxcvbn';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {useNavigate} from 'react-router-dom';
 import {useAuthStore} from "../store/authStore.jsx";
-
-
+const API_URL = import.meta.env.VITE_API_URL;
 export default function Signup() {
     const [submitting, setSubmitting] = useState(false);
+
     const login = useAuthStore(state => state.login);
+
     const {
         username, age, email, userClass, board, language, phone, password,
         errors,
@@ -31,7 +32,7 @@ export default function Signup() {
         }
 
         try {
-            const res = await fetch(`http://localhost:8000/api/check-username?username=${encodeURIComponent(username)}`);
+            const res = await fetch(`${API_URL}/api/check-username?username=${encodeURIComponent(username)}`);
             const data = await res.json();
             if (data.exists) {
                 setErrors(prev => ({...prev, username: "Username already taken"}));
@@ -80,7 +81,7 @@ export default function Signup() {
                     ? {username, age, email, userClass, board, language, phone, password}
                     : {username, age, email, userClass, language, phone, password};
 
-                const response = await fetch("http://localhost:8000/api/signup", {
+                const response = await fetch(`${API_URL}/api/signup`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(requestBody),
@@ -109,7 +110,8 @@ export default function Signup() {
     };
 
     return (
-
+        <>
+        <div className="signuppage-container"></div>
         <div className="signup-container">
             <form onSubmit={(e) => {
                 e.preventDefault();
@@ -291,5 +293,6 @@ export default function Signup() {
 
             </form>
         </div>
+            </>
 
     )};

@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
+import {Link} from 'react-router-dom';
+import {useAuthStore} from '../store/authStore';
 import '../styles/Navbar.css';
 
 export default function Navbar() {
@@ -9,7 +9,7 @@ export default function Navbar() {
         <nav className="navbar">
             <div className="logo">
                 <Link to={isAuthenticated ? '/app/dashboard' : '/'} className="logo-link">
-                    <img src="/SubjectSwapLogo.png" alt="Subject Swap Logo" />
+                    <img src="/SubjectSwapLogo.png" alt="Subject Swap Logo"/>
                 </Link>
             </div>
 

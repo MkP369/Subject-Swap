@@ -16,13 +16,13 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
-<<<<<<< HEAD
+
       env: {
         browser: true,
         node: true
       },
-=======
->>>>>>> adcbce6 (Add all project files including backend models)
+
+
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },

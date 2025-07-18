@@ -6,14 +6,14 @@ export default function Profile() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        logout();              // clear user auth state
-        navigate('/');         // redirect to home page (or login, as you prefer)
+        logout();
+        navigate("/");
     };
 
     return (
         <div >
             <h2>Your Profile</h2>
-            {/* Add your profile details here */}
+
 
             <button onClick={handleLogout}>
                 Log Out
