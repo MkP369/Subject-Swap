@@ -34,7 +34,7 @@ const ProfilesSchema = new mongoose.Schema({
 
   profileImage: {
     type: String,
-    default: 'https://tse4.mm.bing.net/th/id/OIP.dDKYQqVBsG1tIt2uJzEJHwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
+    default: "https://th.bing.com/th/id/OIP.CuSAMOgN8JsY-ofUsV-Z2wHaHa?w=201&h=201&c=7&r=0&o=7&pid=1.7&rm=3",
   }
 });
 

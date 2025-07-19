@@ -8,17 +8,17 @@ export default function Profile() {
   const token = useAuthStore(state => state.token);
   const navigate = useNavigate();
 
-  const [profile, setProfile] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [user, setUser] = useState(null);
+  const [img, setImg] = useState(null);
 
-  const [availability, setAvailability] = useState("Flexible");
-  const [chatOnly, setChatOnly] = useState(false);
+  const [avail, setAvail] = useState("Flexible");
+  const [chat, setChat] = useState(false);
 
   const [selstr, setstr] = useState('');
-  const [str, setsub] = useState([]);
+  const [strong, setStrong] = useState([]);
 
-  const [selWeak, setWeak] = useState('');
-  const [weakSubjects, setWeakSubjects] = useState([]);
+  const [selweak, setSelweak] = useState('');
+  const [weak, setWeak] = useState([]);
 
   const sub = [
     "Python Programming", "Mathematics", "Science",
@@ -26,88 +26,126 @@ export default function Profile() {
     "Social Science", "Microeconomics", "UI/UX Design"
   ];
 
-  const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   const handleLogout = () => {
     logout();
     navigate('/');
   };
-  const handlesave= async() => {
+
+  const fetchProfile = async () => {
+    if (!token) return;
+
+    const res = await fetch('http://localhost:8000/api/profile', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      setUser(data.user);
+      setStrong(data.user.strongSubjects);
+      setWeak(data.user.weakSubjects);
+      setAvail(data.user.availability);
+      setChat(data.user.chatOnly);
+    } else {
+      console.error(data.message);
+    }
   };
+
+  const handleSave = async () => {
+    const updatedData = {
+      username: user.username,
+      age: user.age,
+      phone: user.phone,
+      userClass: user.userClass,
+      language: user.language,
+      availability: avail,
+      chatOnly: chat,
+      strongSubjects: strong,
+      weakSubjects: weak
+    };
+
+    try {
+      const res = await fetch('http://localhost:8000/api/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        console.log("Profile updated:", data);
+      } else {
+        console.error("Failed to update:", data.message);
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, [token]);
 
   const backhome = () => {
     navigate('/');
   };
 
-  const handleImageChange = (e) => {
+  const handleImg = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedImage(e.target.files[0]);
+      setImg(e.target.files[0]);
     }
   };
 
-  useEffect(() => {
-    async function fetchProfile() {
-      if (!token) return;
-
-      const res = await fetch('http://localhost:8000/api/profile', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      const userinfo = await res.json();
-
-      if (userinfo.success) {
-        setProfile(userinfo.user);
-      } else {
-        console.error(userinfo.message);
-      }
-    }
-
-    fetchProfile();
-  }, [token]);
-
   const handleAdd = () => {
-    const ifexist = str.includes(selstr);
+      const ifexist = strong.includes(selstr);
     const isValid = selstr !== "";
 
     if (isValid && !ifexist) {
-      setsub(str.concat(selstr));
+      setStrong(strong.concat(selstr));
+      
     }
   };
 
-  const handlerem = () => {
-    const ifexist = str.includes(selstr);
+  const handleRemove = () => {
+    const ifexist = strong.includes(selstr);
     const isValid = selstr !== "";
 
     if (isValid && ifexist) {
-      const temp = str.filter(subject => subject !== selstr);
-      setsub(temp);
+      const temp = strong.filter(subject => subject !== selstr);
+      setStrong(temp);
+      
     }
   };
 
   const handleAddWeak = () => {
-    const ifexist = weakSubjects.includes(selWeak);
-    const isValid = selWeak !== "";
+    
+    const ifexist = weak.includes(selweak);
+    const isValid = selweak !== "";
 
     if (isValid && !ifexist) {
-      setWeakSubjects(weakSubjects.concat(selWeak));
+          setWeak(weak.concat(selweak));
+      
     }
   };
 
   const handleRemoveWeak = () => {
-    const ifexist = weakSubjects.includes(selWeak);
-    const isValid = selWeak !== "";
-
+    const ifexist = weak.includes(selweak);
+    const isValid = selweak !== "";
     if (isValid && ifexist) {
-      const temp = weakSubjects.filter(subject => subject !== selWeak);
-      setWeakSubjects(temp);
+     const temp = weak.filter(subject => subject !== selweak);
+      setWeak(temp);
     }
-  };
+  }
 
-  if (!profile) return <div className='loading'>Loading profile...</div>;
+  if (!user) return <div className='loading'>Loading profile...</div>;
 
   return (
     <div className="profilebody">
@@ -119,7 +157,7 @@ export default function Profile() {
       <div className="profile-container">
         <div className="image">
           <img
-            src={selectedImage ? URL.createObjectURL(selectedImage) : "https://th.bing.com/th/id/OIP.CuSAMOgN8JsY-ofUsV-Z2wHaHa?w=201&h=201&c=7&r=0&o=7&pid=1.7&rm=3"}
+            src={img ? URL.createObjectURL(img) : "https://th.bing.com/th/id/OIP.CuSAMOgN8JsY-ofUsV-Z2wHaHa?w=201&h=201&c=7&r=0&o=7&pid=1.7&rm=3"}
             alt="Profile"
             className="profileimg"
           />
@@ -129,55 +167,40 @@ export default function Profile() {
             type="file"
             id="imageUpload"
             accept="image/*"
-            onChange={handleImageChange}
+            onChange={handleImg}
             className="imginp"
           />
-          
-          <button className="saveimg" onClick={handlesave}>save</button>
-          
         </div>
 
         <div className="mid">
-          <h3 className="name">{profile.username}</h3>
+          <div className='midbar'>
+          <h3 className="name">{user.username}</h3>
+          
+          <button className="editbut" onClick={handleSave}>EDIT-BIO</button>
+          </div>
 
           <div className="bio">
-            <div className='topbiobar'>
-
+              <h4 className="biohead">BIO</h4>
+            <p>Email: {user.email}</p>
+            <p>Age: {user.age}</p>
+            <p>Board: {user.board || 'Nil'}</p>
+            <p>Class: {user.userClass}</p>
+            <p>Language: {user.language}</p>
+            <p>Phone: {user.phone || 'Nil'}</p>
             
-            <h4 className="biohead">BIO</h4>
-            <button className="editbut">EDIT-BIO</button>
-            </div>
-            <p>Email: {profile.email}</p>
-            <p>Age: {profile.age}</p>
-            <p>Board: {profile.board || 'Nil'}</p>
-            <p>Class: {profile.userClass}</p>
-            <p>Language: {profile.language}</p>
-            <p>Phone: {profile.phone || 'Nil'}</p>
-            <div className="biodetails">
-              <label>
-                Enter Your Info
-              </label>
-              <div>
 
-              
-              <input
-                  type="text"
-                 
-                />
-                </div>
-            </div>
             <div className="availablesetings">
               <p><strong>Availability</strong></p>
               <select
                 className="availability-dropdown"
-                value={availability}
-                onChange={(e) => setAvailability(e.target.value)}
+                value={avail}
+                onChange={(e) => setAvail(e.target.value)}
               >
                 <option>Flexible</option>
                 <option>Weekdays - Mornings</option>
                 <option>Weekdays - Evenings</option>
                 <option>Weekends - All Day</option>
-                {daysList.map((day, index) => (
+                {days.map((day, index) => (
                   <option key={index} value={day}>{day}</option>
                 ))}
               </select>
@@ -187,8 +210,8 @@ export default function Profile() {
               <label className="chat-toggle">
                 <input
                   type="checkbox"
-                  checked={chatOnly}
-                  onChange={() => setChatOnly(!chatOnly)}
+                  checked={chat}
+                  onChange={() => setChat(!chat)}
                 />
                 Chat-only Preference
               </label>
@@ -213,10 +236,10 @@ export default function Profile() {
                 ))}
               </select>
               <button onClick={handleAdd} className="addsub">+</button>
-              <button onClick={handlerem} className="remsub">-</button>
+              <button onClick={handleRemove} className="remsub">-</button>
             </div>
             <ul className="listofstrsub">
-              {str.map((subject, index) => (
+              {strong.map((subject, index) => (
                 <p key={index}>{subject}</p>
               ))}
             </ul>
@@ -226,8 +249,8 @@ export default function Profile() {
             <p><strong>Weak Subjects</strong></p>
             <div className="subject-dropdown-group">
               <select
-                value={selWeak}
-                onChange={(e) => setWeak(e.target.value)}
+                value={selweak}
+                onChange={(e) => setSelweak(e.target.value)}
                 className="subject-dropdown"
               >
                 <option value="">subjects</option>
@@ -239,7 +262,7 @@ export default function Profile() {
               <button onClick={handleRemoveWeak} className="remsub">-</button>
             </div>
             <ul className="listofstrsub">
-              {weakSubjects.map((subject, index) => (
+              {weak.map((subject, index) => (
                 <p key={index}>{subject}</p>
               ))}
             </ul>

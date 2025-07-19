@@ -120,4 +120,38 @@ router.get('/profile', authcheck, async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+router.patch('/profile', authcheck, async (req, res) => {
+  try {
+    const userProfile = await Profiles.findOne({ userId: req.user.id });
+
+    if (!userProfile) {
+      return res.status(404).json({ success: false, message: 'Profile not found' });
+    }
+
+    const allowedFields = [
+      'username',
+      'email',
+      'age',
+      'board',
+      'phone',
+      'userClass',
+      'language',
+      'availability', 'chatOnly', 'strongSubjects',
+      'weakSubjects', 'profileImage'
+    ];
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        userProfile[field] = req.body[field];
+      }
+    });
+
+    await userProfile.save();
+
+    res.json({ success: true, message: 'Profile updated successfully', profile: userProfile });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 module.exports = router;
